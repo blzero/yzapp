@@ -1,0 +1,15 @@
+.insert-data{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 0 15px;
+}
+.insert-data textarea{
+    resize: none;
+    border: 1px solid #389;
+    flex: 1;
+}
+.insert-data .add-device{
+    width: 60px;
+    height: 40px;
+}
