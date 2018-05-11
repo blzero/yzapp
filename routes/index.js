@@ -3,8 +3,6 @@ var router = express.Router();
 var session = require('express-session');
 var db = require('../database/index');
 
-// var io = require('socket.io').listen(8080);
-
 router.use(session({
   secret: 'app secret',
   cookie: {
@@ -18,17 +16,6 @@ router.use(session({
 router.get('/', function (req, res) {
   //session 已经登陆
   if (req.session.sign) {
-
-    //创建 socket 
-    // io.on('connection', function (socket) {
-
-    //   //接收到消息
-    //   socket.on('message', function (data) {
-    //    console.log(data);
-
-    //   });
-
-    // });
 
     res.render('index', {
       title: 'Express'

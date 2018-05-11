@@ -26,25 +26,29 @@
 <script src="/javascripts/index.js"></script>
 
 <script>
-   {{!-- var socket = io.connect('127.0.0.1:8080');
-   var socket = io.connect('www.bigiot.net:8585');
-        //接收到 消息
-        socket.on('message',function(data){
-             console.log(data);
-        });
-        socket.on('connect',function(){
-             socket.send({"M":"beat"});
-            console.log('链接成功');
-        }); --}}
 
+    var ws = new WebSocket('ws://www.bigiot.net:8383');
+    ws.onopen = function(evt) { 
+        {{!-- sendMsg(); --}}
+    };
 
+    ws.onmessage = function(evt) {
+        sendMsg();
+    console.log( "Received Message: " + evt.data);
+    ws.close();
+    };
 
+    ws.onclose = function(evt) {
+        console.log("Connection closed.");
+    }; 
 
-
-
-
-
-
+    var sendMsg = function(){
+        {{!-- console.log('sendMsg'); --}}
+        ws.send({"M":"beat"});
+         {{!-- setTimeout(function(){
+            sendMsg();
+        },30000); --}}
+    }
 
 
 </script>
