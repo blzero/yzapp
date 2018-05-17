@@ -33,9 +33,9 @@
     };
 
     ws.onmessage = function(evt) {
-        sendMsg();
+        {{!-- sendMsg(); --}}
     console.log( "Received Message: " + evt.data);
-    ws.close();
+    {{!-- ws.close(); --}}
     };
 
     ws.onclose = function(evt) {
@@ -43,7 +43,6 @@
     }; 
 
     var sendMsg = function(){
-        {{!-- console.log('sendMsg'); --}}
         ws.send({"M":"beat"});
          {{!-- setTimeout(function(){
             sendMsg();

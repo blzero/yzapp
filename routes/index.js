@@ -38,7 +38,7 @@ router.get('/login', function (req, res, next) {
 
 router.post('/login', function (req, res, next) {
   var params = req.body;
-  db.query('SELECT * FROM user', function (result) {
+  db.query('SELECT * FROM user',[], function (result) {
 
     let find = false;
     let canLogin = false;
@@ -82,12 +82,31 @@ router.post('/login', function (req, res, next) {
 
 router.post('/addDevice', function (req, res, next) {
   if (req.body) {
-    var str = `INSERT INTO device (m,name) VALUES ('${req.body.M}','${req.body.NAME}')`;
+    var str = '';
+    let temp = req.body.device;
+    temp = JSON.parse(JSON.parse(temp));
 
-    db.query(str, function () {
+    if (Array.isArray(temp)) {
+      for (let i = 0; i < temp.length; i++) {
+        let item = temp[i];
+        str = `INSERT INTO device (electricity,voltage,power) VALUES ('${item.electricity}','${item.voltage}','${item.power}')`;
+        db.query(str,[], function () {
+          res.end('success');
+        });
+      }
 
-      res.end('success');
-    });
+    }
+    
+    // else {
+
+    //   str = `INSERT INTO device (electricity,voltage,power) VALUES ('${temp.electricity}','${temp.voltage}','${temp.power}')`;
+      
+    //   db.query(str, function () {
+    //     res.end('success');
+    //   });
+    // }
+
+
 
   } else {
     res.end('null');
@@ -97,9 +116,7 @@ router.post('/addDevice', function (req, res, next) {
 
 router.post('/queryDevice', function (req, res, next) {
   var str = `SELECT * FROM device`;
-
-  db.query(str, function (data) {
-
+  db.query(str,[], function (data) {
     res.end(JSON.stringify(data));
   });
 });

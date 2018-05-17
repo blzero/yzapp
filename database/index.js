@@ -19,9 +19,10 @@ const db = function () {
         connection.end();
     }
 
-    function query(condition,callback) {
+    function query(condition,values,callback) {
+        values = values || [];
         // open();
-        connection.query(condition, function (err, rows, fields) {
+        connection.query(condition,values, function (err, rows, fields) {
             if (err) throw err;
             callback && callback(rows);
         });

@@ -7,14 +7,18 @@ btn.click(function(){
         alert('null');
         return;
     }
-    addDevice(JSON.parse(text));
+    addDevice(JSON.stringify(text));
 });
 
+// [{"electricity":22,"power":33,"voltage":44},{"electricity":22,"power":33,"voltage":44}]
 var addDevice = function(data){
+    console.log(data);
     $.ajax({
         type:'post',
         url:'/addDevice',
-        data:data,
+        data:{
+            device:data,
+        },
         success:function(res){
             console.log( res);
         },
@@ -45,7 +49,7 @@ var rendList =function(data){
     var lis = '';
     for(var i = 0;i<data.length;i++){
         var item = data[i];
-        lis += `<li>${item.Id}:${item.m}:${item.name}</li>`;
+        lis += `<li>${item.Id}:${item.electricity}:${item.voltage};:${item.power}</li>`;
     }
 
     list.html(lis);
