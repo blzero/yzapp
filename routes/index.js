@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var session = require('express-session');
 var db = require('../database/index');
+var queryF = require('./query');
 
 router.use(session({
   secret: 'app secret',
@@ -12,6 +13,8 @@ router.use(session({
 
 //process session
 /* GET home page. */
+
+const tempUrl = '/login';
 
 router.get('/', function (req, res) {
   //session 已经登陆
@@ -34,11 +37,20 @@ router.get('/login', function (req, res, next) {
     title: 'login'
   });
 });
+router.get('/query', function (req, res, next) {
+  if (req.session.sign) {
+    res.render('query_page', {
+      title: '查询'
+    });
+  } else {
+    res.redirect('/login');
+  }
+});
 
 
 router.post('/login', function (req, res, next) {
   var params = req.body;
-  db.query('SELECT * FROM user',[], function (result) {
+  db.query('SELECT * FROM user', [], function (result) {
 
     let find = false;
     let canLogin = false;
@@ -79,34 +91,26 @@ router.post('/login', function (req, res, next) {
 
 });
 
-
 router.post('/addDevice', function (req, res, next) {
+  if (!req.session.sign) {
+    res.end('未登录');
+    return;
+  }
+
   if (req.body) {
     var str = '';
     let temp = req.body.device;
-    temp = JSON.parse(JSON.parse(temp));
-
+    temp = JSON.parse(temp);
+    // console.log(temp);
     if (Array.isArray(temp)) {
       for (let i = 0; i < temp.length; i++) {
         let item = temp[i];
-        str = `INSERT INTO device (electricity,voltage,power) VALUES ('${item.electricity}','${item.voltage}','${item.power}')`;
-        db.query(str,[], function () {
+        str = `INSERT INTO device (electricity,voltage,power,deviceId,temperature) VALUES ('${item.electricity}','${item.voltage}','${item.power}','${item.id}','${item.temperature}')`;
+        db.query(str, [], function () {
           res.end('success');
         });
       }
-
     }
-    
-    // else {
-
-    //   str = `INSERT INTO device (electricity,voltage,power) VALUES ('${temp.electricity}','${temp.voltage}','${temp.power}')`;
-      
-    //   db.query(str, function () {
-    //     res.end('success');
-    //   });
-    // }
-
-
 
   } else {
     res.end('null');
@@ -114,13 +118,8 @@ router.post('/addDevice', function (req, res, next) {
 });
 
 
-router.post('/queryDevice', function (req, res, next) {
-  var str = `SELECT * FROM device`;
-  db.query(str,[], function (data) {
-    res.end(JSON.stringify(data));
-  });
-});
-
+// 查询
+router.post('/queryDevice', queryF);
 
 
 function resultData(code) {

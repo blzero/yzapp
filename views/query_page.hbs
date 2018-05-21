@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./stylesheets/reset.css">
+    <link rel="stylesheet" href="./stylesheets/query_page.css">
+
+    <title>查询</title>
+</head>
+
+<body>
+    <div class="page">
+        <div class="filtrate-content">
+            <input type="text" placeholder="设备ID" class="device-id">
+            <a href="javascript:;" class="query-btn">查询</a>
+        </div>
+
+
+        <div class="chart-line">
+
+        </div>
+
+    </div>
+
+    <script src="./javascripts/echarts.min.js"></script>
+    <script src="./javascripts/zepto.min.js"></script>
+
+    <script>
+        var qbtn = $('.query-btn');
+        var input = $('.device-id');
+        qbtn.click(function () {
+            if (!input.val()) {
+                alert('请输入设备ID');
+                return;
+            }
+
+            queryAction(input.val());
+        });
+
+
+        var queryAction = function (deviceId) {
+            $.ajax({
+                url: '/queryDevice',
+                type: 'post',
+                data:{
+                    deviceId:deviceId,
+                },
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
