@@ -19,6 +19,7 @@
         </div>
 
 
+
         <div class="chart-line">
 
         </div>
@@ -36,7 +37,6 @@
                 alert('请输入设备ID');
                 return;
             }
-
             queryAction(input.val());
         });
 
@@ -45,17 +45,98 @@
             $.ajax({
                 url: '/queryDevice',
                 type: 'post',
-                data:{
-                    deviceId:deviceId,
+                data: {
+                    deviceId: deviceId,
                 },
                 success: function (res) {
                     var data = JSON.parse(res);
+                    if(!data) {
+                        alert('没有数据');
+                        return;
+                    }
+                    setChart(data);
                     console.log(data);
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
+        }
+
+        var setChart = function (data) {
+            var electricitys = [];//mA
+            var voltages = [];//V
+            var powers = [];//W
+            var temperatures = [];//°C
+
+            var xData = [];
+
+            for(var i =0;i<data.length;i++){
+                var item = data[i];
+                electricitys.push(item.electricity);
+                voltages.push(item.voltage);
+                powers.push(item.power);
+                temperatures.push(item.temperature);
+                xData.push(i);
+            }
+
+
+          var  option = {
+                title: {
+                    text: '折线图'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['电流', '电压', '功率', '温度']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data:xData,
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                        name: '电流',
+                        type: 'line',
+                        data: electricitys,
+                    },
+                    {
+                        name: '电压',
+                        type: 'line',
+                        data: voltages,
+                    },
+                    {
+                        name: '功率',
+                        type: 'line',
+                        data: powers,
+                    },
+                    {
+                        name: '温度',
+                        type: 'line',
+                        data: temperatures,
+                    }
+                ]
+            };
+
+
+        var chart =  echarts.init(document.querySelector('.chart-line'));
+        chart.setOption(option);
+
         }
     </script>
 

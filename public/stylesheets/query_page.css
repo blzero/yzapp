@@ -2,3 +2,7 @@
 .filtrate-content{display: flex;justify-content: center;align-items: center;padding: 15px;}
 .filtrate-content .device-id{height: 30px;flex: 1 0 auto; border-bottom: 1px solid lightblue;padding-left: 10px;}
 .query-btn{width: 70px;height: 30px;text-align: center;line-height: 30px; background: lightblue;color: #fff;margin:0 15px;}
+.chart-line{
+    width: 100%;
+    height: 400px;
+}

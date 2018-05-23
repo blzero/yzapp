@@ -26,8 +26,8 @@ const db = function () {
             if (err) throw err;
             callback && callback(rows);
         });
-
         // close();
+
     }
 
     return {
