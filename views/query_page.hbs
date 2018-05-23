@@ -18,6 +18,11 @@
             <a href="javascript:;" class="query-btn">查询</a>
         </div>
 
+        <div class="t-list-content">
+            <table class="t-list">
+               
+            </table>
+        </div>
 
 
         <div class="chart-line">
@@ -54,6 +59,7 @@
                         alert('没有数据');
                         return;
                     }
+                    renderList(data);
                     setChart(data);
                     console.log(data);
                 },
@@ -63,6 +69,31 @@
             });
         }
 
+        //列表
+        var renderList = function(data){
+            var list = document.querySelector('.t-list');
+            var trs = ` <tr>
+                    <th>电流</th>
+                    <th>电压</th>
+                    <th>功率</th>
+                    <th>温度</th>
+                </tr>`; 
+            for(var i=0;i<data.length;i++){
+                var item = data[i];
+                trs += ` <tr>
+                    <td>${item.electricity}</td>
+                    <td>${item.voltage}</td>
+                    <td>${item.power}</td>
+                    <td>${item.temperature}</td>
+                </tr>`;
+
+            }
+
+            list.innerHTML = trs;
+        }
+
+
+        // 折线图
         var setChart = function (data) {
             var electricitys = [];//mA
             var voltages = [];//V
