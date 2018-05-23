@@ -82,7 +82,7 @@ var timingAddData = function () {
     addDevice(JSON.stringify(temp));
     setTimeout(timingAddData, 240000);
 }
-timingAddData();
+// timingAddData();
 
 
 
